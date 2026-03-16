@@ -8,18 +8,11 @@
     <!-- ========================================== -->
     <!-- META TAGS PARA PWA (IPHONE Y ANDROID)      -->
     <!-- ========================================== -->
-    <!-- Color de la barra superior en Android -->
     <meta name="theme-color" content="#4f46e5">
-    
-    <!-- Etiquetas específicas para iPhone (Safari) -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="IMADE">
-    
-    <!-- ICONO PARA IPHONE: Pon aquí el enlace a tu logo en formato PNG (Ideal 512x512) -->
     <link rel="apple-touch-icon" id="apple-icon" href="https://via.placeholder.com/512/4f46e5/ffffff?text=IMADE">
-    
-    <!-- Enlace al manifiesto dinámico -->
     <link rel="manifest" id="manifest-link">
     <!-- ========================================== -->
 
@@ -56,23 +49,36 @@
         .input-field:focus-within {
             transform: translateY(-2px);
         }
+        /* Animación para el botón de instalar */
+        #btnInstalar:not(.hidden) {
+            animation: bounce-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes bounce-in {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
     </style>
 </head>
 <body class="text-slate-800 antialiased min-h-screen flex flex-col selection:bg-indigo-100 selection:text-indigo-900">
 
     <!-- Header (Sticky tipo App con gradiente) -->
-    <header class="bg-gradient-to-r from-indigo-600 to-blue-500 text-white p-5 shadow-lg sticky top-0 z-40 rounded-b-2xl">
-        <div class="max-w-md mx-auto flex items-center justify-center relative">
-            <div class="bg-white/20 p-2 rounded-xl backdrop-blur-sm mr-3">
-                <i class="fas fa-users-cog text-2xl"></i>
+    <header class="bg-gradient-to-r from-indigo-600 to-blue-500 text-white p-4 shadow-lg sticky top-0 z-40 rounded-b-2xl">
+        <div class="max-w-md mx-auto flex items-center justify-between">
+            <!-- Contenedor de Logo y Título -->
+            <div class="flex items-center">
+                <div class="bg-white/20 p-2 rounded-xl backdrop-blur-sm mr-3">
+                    <i class="fas fa-users-cog text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold leading-tight">Registro de Clientes</h1>
+                    <p class="text-[10px] text-indigo-100 font-medium tracking-wider uppercase">IT - Grupo Imade</p>
+                </div>
             </div>
-            <div>
-                <h1 class="text-xl font-bold leading-tight">Registro de Clientes</h1>
-                <p class="text-xs text-indigo-100 font-medium tracking-wider uppercase">Departamento de IT - Grupo Imade</p>
-            </div>
-            <!-- Botón de Instalar (Solo visible si el navegador lo permite) -->
-            <button id="btnInstalar" class="absolute right-0 hidden bg-white/20 hover:bg-white/30 p-2 rounded-lg text-xs font-bold transition-all backdrop-blur-sm">
-                <i class="fas fa-download"></i> Instalar
+    
+            <!-- Botón de Instalar Mejorado -->
+            <button id="btnInstalar" class="hidden bg-white/20 hover:bg-white/30 px-3 py-2 rounded-xl text-xs font-bold transition-all backdrop-blur-sm border border-white/10 flex items-center gap-2 active:scale-95">
+                <i class="fas fa-download"></i>
+                <span>Instalar</span>
             </button>
         </div>
     </header>
@@ -231,7 +237,7 @@
     <!-- Modal de Carga / Overlay -->
     <div id="loadingOverlay" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex-col items-center justify-center transition-opacity">
         <div class="loader mb-5"></div>
-        <p id="loadingText" class="text-white text-lg font-semibold tracking-wide">Obteniendo ubicación...</p>
+        <p id="loadingText" class="text-white text-lg font-semibold tracking-wide text-center px-4">Obteniendo ubicación...</p>
     </div>
 
     <!-- Modal de Éxito -->
@@ -253,60 +259,39 @@
         // CONFIGURACIÓN PWA (APP PARA CELULARES)
         // =========================================================================
         
-        // 1. CAMBIA ESTE ENLACE POR TU FOTO / LOGO EN FORMATO PNG
-        // Sube tu logo a internet (Imgur, tu propio servidor, etc) y pon el link aquí.
         const ICONO_APP_URL = "https://i.postimg.cc/FR0t3nMf/CLIENTES-(3).png";
-        
-        // Asegurar que el icono de iPhone también se actualice
         document.getElementById('apple-icon').href = ICONO_APP_URL;
 
-        // 2. Generar el Manifiesto dinámicamente
         const appManifest = {
             "name": "Registro IMADE",
             "short_name": "IMADE",
             "start_url": window.location.href,
-            "display": "standalone", // Esto oculta la barra de direcciones
+            "display": "standalone",
             "background_color": "#f8fafc",
             "theme_color": "#4f46e5",
             "icons": [
-                {
-                    "src": ICONO_APP_URL,
-                    "sizes": "192x192",
-                    "type": "image/png"
-                },
-                {
-                    "src": ICONO_APP_URL,
-                    "sizes": "512x512",
-                    "type": "image/png"
-                }
+                { "src": ICONO_APP_URL, "sizes": "192x192", "type": "image/png" },
+                { "src": ICONO_APP_URL, "sizes": "512x512", "type": "image/png" }
             ]
         };
         
-        // Inyectar el manifiesto en el HTML
         const blobManifest = new Blob([JSON.stringify(appManifest)], {type: 'application/manifest+json'});
         document.getElementById('manifest-link').href = URL.createObjectURL(blobManifest);
 
-        // 3. Generar un Service Worker básico (Requisito para Android)
         if ('serviceWorker' in navigator) {
-            const swCode = `
-                self.addEventListener('fetch', function(event) {
-                    // Service Worker pasivo, solo para cumplir el requisito de PWA
-                });
-            `;
+            const swCode = `self.addEventListener('fetch', function(event) {});`;
             const blobSW = new Blob([swCode], {type: 'application/javascript'});
             navigator.serviceWorker.register(URL.createObjectURL(blobSW))
-                .then(() => console.log('App lista para instalarse'))
                 .catch(err => console.log('SW Error:', err));
         }
 
-        // 4. Botón de Instalación (Solo Android/Chrome)
         let deferredPrompt;
         const btnInstalar = document.getElementById('btnInstalar');
         
         window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault(); // Evita que Chrome muestre el prompt automáticamente
+            e.preventDefault(); 
             deferredPrompt = e;
-            btnInstalar.classList.remove('hidden'); // Muestra nuestro botón personalizado
+            btnInstalar.classList.remove('hidden'); 
         });
 
         btnInstalar.addEventListener('click', async () => {
@@ -320,9 +305,8 @@
             }
         });
 
-
         // =========================================================================
-        // LÓGICA DEL FORMULARIO ORIGINAL (MANTENIDO INTACTO)
+        // LÓGICA DEL FORMULARIO
         // =========================================================================
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8KYULiMngMxRqLXuJ38VsY2QQ__92DVDEdi5LDvEFW8IfMTDblXhWwqC48c87SQEM/exec"; 
 
@@ -404,7 +388,36 @@
             input.value = textoCapitalizado;
         }
 
-        form.addEventListener('submit', (e) => {
+        // =========================================================================
+        // MEJORA: FUNCIÓN ROBUSTA PARA OBTENER UBICACIÓN EN MOVILES
+        // =========================================================================
+        function obtenerUbicacionGPS() {
+            return new Promise((resolve, reject) => {
+                if (!("geolocation" in navigator)) {
+                    reject(new Error("Geolocalización no soportada por el navegador."));
+                    return;
+                }
+
+                // INTENTO 1: Alta precisión (Tarda más, requiere buen cielo despejado)
+                navigator.geolocation.getCurrentPosition(
+                    (position) => resolve(position),
+                    (errorInfo) => {
+                        console.warn("Fallo alta precisión, intentando método de respaldo...", errorInfo.message);
+                        loadingText.innerText = "Buscando ubicación aproximada...";
+                        
+                        // INTENTO 2: Baja precisión (Usa Antenas WiFi/Celular - No falla en interiores)
+                        navigator.geolocation.getCurrentPosition(
+                            (posBaja) => resolve(posBaja),
+                            (errBaja) => reject(errBaja),
+                            { enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 }
+                        );
+                    },
+                    { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
+                );
+            });
+        }
+
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             localStorage.setItem("vendedorGuardado", document.getElementById("vendedor").value);
@@ -417,26 +430,27 @@
             const fechaFormateada = now.toLocaleString('es-GT');
             document.getElementById('fechaHora').value = fechaFormateada;
 
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const lat = position.coords.latitude;
-                        const lng = position.coords.longitude;
-                        document.getElementById('ubicacion').value = `${lat}, ${lng}`;
-                        enviarDatosSheet();
-                    },
-                    (error) => {
-                        console.warn("Error GPS:", error.message);
-                        alert("⚠️ No se pudo obtener la ubicación. Por favor, asegúrate de tener el GPS encendido y conceder los permisos de ubicación al navegador.");
-                        loadingOverlay.classList.add('hidden');
-                        loadingOverlay.classList.remove('flex');
-                    },
-                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-                );
-            } else {
-                alert("Tu dispositivo no soporta geolocalización.");
-                loadingOverlay.classList.add('hidden');
-                loadingOverlay.classList.remove('flex');
+            try {
+                // Llama a la nueva función robusta
+                const position = await obtenerUbicacionGPS();
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                document.getElementById('ubicacion').value = `${lat}, ${lng}`;
+                
+                enviarDatosSheet();
+            } catch (error) {
+                console.warn("Error definitivo de GPS:", error.message);
+                
+                // Si incluso el método de respaldo falla, preguntamos al usuario si desea enviarlo sin ubicación
+                const enviarSinGPS = confirm("⚠️ No pudimos obtener tu ubicación (Verifica los permisos de tu navegador). ¿Deseas guardar el registro sin GPS?");
+                
+                if (enviarSinGPS) {
+                    document.getElementById('ubicacion').value = "Ubicación no disponible";
+                    enviarDatosSheet();
+                } else {
+                    loadingOverlay.classList.add('hidden');
+                    loadingOverlay.classList.remove('flex');
+                }
             }
         });
 
