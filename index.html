@@ -2,116 +2,132 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <!-- Meta tag crucial para que se vea y comporte como App nativa en móviles -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Registro de Clientes - IMADE</title>
-    <!-- Tailwind CSS para el diseño rápido y moderno -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Iconos de FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* Ajustes para parecer más una app */
         body {
+            font-family: 'Poppins', sans-serif;
             -webkit-tap-highlight-color: transparent;
-            background-color: #f3f4f6; /* gray-100 */
+            background-color: #f8fafc; /* slate-50 */
         }
-        /* Spinner de carga */
+        /* Spinner de carga estilizado */
         .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3b82f6; /* blue-500 */
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #ffffff;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
+            width: 48px;
+            height: 48px;
+            animation: spin 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        /* Estilos de input modernos */
+        .input-field {
+            transition: all 0.3s ease;
+        }
+        .input-field:focus-within {
+            transform: translateY(-2px);
+        }
     </style>
 </head>
-<body class="text-gray-800 antialiased min-h-screen flex flex-col">
+<body class="text-slate-800 antialiased min-h-screen flex flex-col selection:bg-indigo-100 selection:text-indigo-900">
 
-    <!-- Header (Sticky tipo App) -->
-    <header class="bg-blue-600 text-white p-4 shadow-md sticky top-0 z-10">
+    <!-- Header (Sticky tipo App con gradiente) -->
+    <header class="bg-gradient-to-r from-indigo-600 to-blue-500 text-white p-5 shadow-lg sticky top-0 z-10 rounded-b-2xl">
         <div class="max-w-md mx-auto flex items-center justify-center">
-            <i class="fas fa-users-cog text-2xl mr-3"></i>
-            <h1 class="text-xl font-bold">Registro de Clientes</h1>
+            <div class="bg-white/20 p-2 rounded-xl backdrop-blur-sm mr-3">
+                <i class="fas fa-users-cog text-2xl"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold leading-tight">Registro de Clientes</h1>
+                <p class="text-xs text-indigo-100 font-medium tracking-wider uppercase">Base de Datos IMADE</p>
+            </div>
         </div>
     </header>
 
     <!-- Contenedor Principal -->
-    <main class="flex-grow p-4">
-        <div class="max-w-md mx-auto bg-white rounded-2xl shadow-sm p-6 mb-8 border border-gray-100">
+    <main class="flex-grow p-4 mt-2">
+        <div class="max-w-md mx-auto bg-white rounded-3xl shadow-xl shadow-slate-200/50 p-7 mb-8 border border-slate-100 relative overflow-hidden">
             
-            <p class="text-sm text-gray-500 mb-6 text-center">
-                Completa los datos. La ubicación y fecha se capturarán automáticamente.
+            <!-- Decoración de fondo -->
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-indigo-50 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
+
+            <p class="text-sm text-slate-500 mb-8 text-center font-medium">
+                Completa los datos. La <span class="text-indigo-600 font-semibold">ubicación</span> y <span class="text-indigo-600 font-semibold">fecha</span> se guardarán automáticamente.
             </p>
 
-            <form id="registroForm" class="space-y-5">
+            <form id="registroForm" class="space-y-6 relative z-10">
                 
                 <!-- Campos Ocultos para Ubicación y Fecha -->
                 <input type="hidden" id="ubicacion" name="ubicacion">
                 <input type="hidden" id="fechaHora" name="fechaHora">
 
                 <!-- 1. Nombre de Vendedor -->
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1" for="vendedor">Nombre de Vendedor <span class="text-red-500">*</span></label>
+                <div class="input-field">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="vendedor">Nombre de Vendedor <span class="text-rose-500">*</span></label>
                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-user-tie text-gray-400"></i>
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                            <i class="fas fa-user-tie text-indigo-400"></i>
                         </div>
                         <input type="text" id="vendedor" name="vendedor" required placeholder="Ej. Carlos Pérez" 
-                            class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base transition-colors">
+                            class="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white text-base transition-all shadow-sm">
                     </div>
                 </div>
 
                 <!-- 2. Nombre de Cliente -->
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1" for="cliente">Nombre de Cliente <span class="text-red-500">*</span></label>
+                <div class="input-field">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="cliente">Nombre de Cliente <span class="text-rose-500">*</span></label>
                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-user text-gray-400"></i>
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                            <i class="fas fa-user text-indigo-400"></i>
                         </div>
-                        <input type="text" id="cliente" name="cliente" required placeholder="Ej. Empresa S.A." onblur="capitalizarTexto(this)"
-                            class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base transition-colors">
+                        <input type="text" id="cliente" name="cliente" required placeholder="Ej. Diego Lara" onblur="capitalizarTexto(this)"
+                            class="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white text-base transition-all shadow-sm">
                     </div>
                 </div>
 
                 <!-- 3. Código de Cliente -->
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1" for="codigo">Código de Cliente <span class="text-red-500">*</span></label>
+                <div class="input-field">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="codigo">Código de Cliente <span class="text-rose-500">*</span></label>
                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-id-badge text-gray-400"></i>
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                            <i class="fas fa-id-badge text-indigo-400"></i>
                         </div>
-                        <input type="text" id="codigo" name="codigo" required placeholder="Ej. CLI-1029" 
-                            class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base transition-colors">
+                        <input type="text" id="codigo" name="codigo" required placeholder="Ej. 1029" 
+                            class="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white text-base transition-all shadow-sm">
                     </div>
                 </div>
 
-                <!-- 4. Correo de Cliente -->
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1" for="correo">Correo Electrónico</label>
+                <!-- 4. Correo de Cliente (AHORA OBLIGATORIO) -->
+                <div class="input-field">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="correo">Correo Electrónico <span class="text-rose-500">*</span></label>
                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-envelope text-gray-400"></i>
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                            <i class="fas fa-envelope text-indigo-400"></i>
                         </div>
-                        <input type="email" id="correo" name="correo" placeholder="cliente@correo.com" 
-                            class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base transition-colors">
+                        <input type="email" id="correo" name="correo" required placeholder="cliente@correo.com" 
+                            class="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white text-base transition-all shadow-sm">
                     </div>
                 </div>
 
                 <!-- 5. Departamento -->
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1" for="departamento">Departamento <span class="text-red-500">*</span></label>
+                <div class="input-field">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="departamento">Departamento <span class="text-rose-500">*</span></label>
                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-map-marked-alt text-gray-400"></i>
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                            <i class="fas fa-map-marked-alt text-indigo-400"></i>
                         </div>
-                        <select id="departamento" name="departamento" required 
-                            class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base appearance-none bg-white">
+                        <select id="departamento" name="departamento" required onchange="actualizarMunicipios()"
+                            class="w-full pl-11 pr-10 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white text-base appearance-none shadow-sm transition-all text-slate-700">
                             <option value="" disabled selected>Selecciona un departamento</option>
                             <option value="Alta Verapaz">Alta Verapaz</option>
                             <option value="Baja Verapaz">Baja Verapaz</option>
@@ -136,52 +152,57 @@
                             <option value="Totonicapán">Totonicapán</option>
                             <option value="Zacapa">Zacapa</option>
                         </select>
-                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                            <i class="fas fa-chevron-down text-gray-400"></i>
+                        <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                            <i class="fas fa-chevron-down text-slate-400"></i>
                         </div>
                     </div>
                 </div>
 
-                <!-- 6. Municipio -->
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1" for="municipio">Municipio <span class="text-red-500">*</span></label>
+                <!-- 6. Municipio (AHORA ES SELECT AUTOMÁTICO) -->
+                <div class="input-field">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="municipio">Municipio <span class="text-rose-500">*</span></label>
                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-map-pin text-gray-400"></i>
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                            <i class="fas fa-map-pin text-indigo-400"></i>
                         </div>
-                        <input type="text" id="municipio" name="municipio" required placeholder="Ej. Mixco" 
-                            class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base transition-colors">
+                        <select id="municipio" name="municipio" required disabled
+                            class="w-full pl-11 pr-10 py-3.5 bg-slate-100 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white text-base appearance-none shadow-sm transition-all text-slate-500 cursor-not-allowed">
+                            <option value="" disabled selected>Primero elige un departamento</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                            <i class="fas fa-chevron-down text-slate-400"></i>
+                        </div>
                     </div>
                 </div>
 
                 <!-- 7. Número de Teléfono (Celular) -->
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1" for="telefono">Teléfono Celular <span class="text-red-500">*</span></label>
+                <div class="input-field">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="telefono">Teléfono Celular <span class="text-rose-500">*</span></label>
                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-mobile-alt text-gray-400"></i>
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                            <i class="fas fa-mobile-alt text-indigo-400"></i>
                         </div>
-                        <input type="tel" id="telefono" name="telefono" required placeholder="Ej. 5555-5555" 
-                            class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base transition-colors">
+                        <input type="tel" id="telefono" name="telefono" required placeholder="Ej. 5555-5555" maxlength="9" oninput="formatearTelefono(this)"
+                            class="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white text-base transition-all shadow-sm tracking-wider">
                     </div>
                 </div>
 
                 <!-- 8. Número de Teléfono Fijo -->
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1" for="telefonoFijo">Teléfono Fijo</label>
+                <div class="input-field">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="telefonoFijo">Teléfono Fijo</label>
                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-phone-alt text-gray-400"></i>
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                            <i class="fas fa-phone-alt text-indigo-400"></i>
                         </div>
-                        <input type="tel" id="telefonoFijo" name="telefonoFijo" placeholder="Ej. 2222-2222" 
-                            class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base transition-colors">
+                        <input type="tel" id="telefonoFijo" name="telefonoFijo" placeholder="Ej. 2222-2222" maxlength="9" oninput="formatearTelefono(this)"
+                            class="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white text-base transition-all shadow-sm tracking-wider">
                     </div>
                 </div>
 
                 <!-- Botón de Envío -->
                 <button type="submit" id="submitBtn" 
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-4 rounded-xl mt-4 shadow-lg transition-transform transform hover:-translate-y-0.5 flex justify-center items-center text-lg">
-                    <i class="fas fa-paper-plane mr-2"></i> Enviar Registro
+                    class="w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-bold py-4 px-4 rounded-xl mt-6 shadow-lg shadow-indigo-200 transition-all transform hover:-translate-y-1 flex justify-center items-center text-lg active:scale-95">
+                    <i class="fas fa-paper-plane mr-2"></i> Guardar Registro
                 </button>
 
             </form>
@@ -189,28 +210,28 @@
     </main>
 
     <!-- Modal de Carga / Overlay -->
-    <div id="loadingOverlay" class="fixed inset-0 bg-gray-900 bg-opacity-70 z-50 hidden flex-col items-center justify-center">
-        <div class="loader mb-4"></div>
-        <p id="loadingText" class="text-white text-lg font-semibold">Obteniendo ubicación...</p>
+    <div id="loadingOverlay" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex-col items-center justify-center transition-opacity">
+        <div class="loader mb-5"></div>
+        <p id="loadingText" class="text-white text-lg font-semibold tracking-wide">Obteniendo ubicación...</p>
     </div>
 
     <!-- Modal de Éxito -->
-    <div id="successModal" class="fixed inset-0 bg-gray-900 bg-opacity-70 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-2xl transform scale-100 transition-transform">
-            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-check text-3xl text-green-500"></i>
+    <div id="successModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl transform scale-100 transition-transform border border-slate-100">
+            <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-5 shadow-inner">
+                <i class="fas fa-check text-4xl text-emerald-500"></i>
             </div>
-            <h2 class="text-2xl font-bold text-gray-800 mb-2">¡Registro Exitoso!</h2>
-            <p class="text-gray-600 mb-6">Los datos han sido guardados en la base de datos correctamente.</p>
-            <button onclick="closeSuccessModal()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-xl transition-colors">
-                Nuevo Registro
+            <h2 class="text-2xl font-bold text-slate-800 mb-2">¡Registro Exitoso!</h2>
+            <p class="text-slate-500 mb-8 font-medium">Los datos se han sincronizado correctamente en la base.</p>
+            <button onclick="closeSuccessModal()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-semibold py-3.5 px-4 rounded-xl transition-colors shadow-md">
+                Registrar Nuevo Cliente
             </button>
         </div>
     </div>
 
     <script>
         // =========================================================================
-        // ⚠️ IMPORTANTE: REEMPLAZA ESTA URL CON LA QUE TE DE GOOGLE APPS SCRIPT
+        // URL DE GOOGLE APPS SCRIPT
         // =========================================================================
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8KYULiMngMxRqLXuJ38VsY2QQ__92DVDEdi5LDvEFW8IfMTDblXhWwqC48c87SQEM/exec"; 
 
@@ -219,9 +240,61 @@
         const loadingText = document.getElementById('loadingText');
         const successModal = document.getElementById('successModal');
 
-        // --- INICIO DE AUTOMATIZACIONES ---
+        // --- INICIO DE AUTOMATIZACIONES Y DATOS ---
 
-        // 1. Cargar datos guardados al iniciar (Recordar Vendedor)
+        // DICCIONARIO CON TODOS LOS 340 MUNICIPIOS DE GUATEMALA
+        const municipiosGuatemala = {
+            "Alta Verapaz": ["Cobán", "San Pedro Carchá", "San Juan Chamelco", "San Cristóbal Verapaz", "Tactic", "Tucurú", "Tamahú", "Panzós", "Senahú", "Cahabón", "Lanquín", "Chahal", "Fray Bartolomé de las Casas", "Santa Catalina La Tinta", "Raxruhá", "Chisec", "Santa Cruz Verapaz"],
+            "Baja Verapaz": ["Salamá", "San Miguel Chicaj", "Rabinal", "Cubulco", "Granados", "El Chol", "San Jerónimo", "Purulhá"],
+            "Chimaltenango": ["Chimaltenango", "San José Poaquil", "San Martín Jilotepeque", "Comalapa", "Santa Apolonia", "Tecpán Guatemala", "Patzún", "Pochuta", "Patzicía", "Santa Cruz Balanyá", "Acatenango", "Yepocapa", "San Andrés Itzapa", "Parramos", "Zaragoza", "El Tejar"],
+            "Chiquimula": ["Chiquimula", "San José La Arada", "San Juan Ermita", "Jocotán", "Camotán", "Olopa", "Esquipulas", "Concepción Las Minas", "Quetzaltepeque", "San Jacinto", "Ipala"],
+            "El Progreso": ["Guastatoya", "Morazán", "San Agustín Acasaguastlán", "San Cristóbal Acasaguastlán", "El Jícaro", "Sansare", "Sanarate", "San Antonio La Paz"],
+            "Escuintla": ["Escuintla", "Santa Lucía Cotzumalguapa", "La Democracia", "Siquinalá", "Masagua", "Tiquisate", "La Gomera", "Guanagazapa", "San José", "Iztapa", "Palín", "San Vicente Pacaya", "Nueva Concepción", "Sipacate"],
+            "Guatemala": ["Guatemala", "Santa Catarina Pinula", "San José Pinula", "San José del Golfo", "Palencia", "Chinautla", "San Pedro Ayampuc", "Mixco", "San Pedro Sacatepéquez", "San Juan Sacatepéquez", "San Raymundo", "Chuarrancho", "Fraijanes", "Amatitlán", "Villa Nueva", "Villa Canales", "San Miguel Petapa"],
+            "Huehuetenango": ["Huehuetenango", "Chiantla", "Malacatancito", "Cuilco", "Nentón", "San Pedro Necta", "Jacaltenango", "Soloma", "Ixtahuacán", "Santa Bárbara", "La Libertad", "La Democracia", "San Miguel Acatán", "San Rafael La Independencia", "Todos Santos Cuchumatán", "San Juan Atitán", "Santa Eulalia", "San Mateo Ixtatán", "Colotenango", "San Sebastián Huehuetenango", "Tectitán", "Concepción Huista", "San Juan Ixcoy", "San Antonio Huista", "San Sebastián Coatán", "Barillas", "Aguacatán", "San Rafael Petzal", "San Gaspar Ixchil", "Santiago Chimaltenango", "Santa Ana Huista", "Unión Cantinil", "Petatán"],
+            "Izabal": ["Puerto Barrios", "Livingston", "El Estor", "Morales", "Los Amates"],
+            "Jalapa": ["Jalapa", "San Pedro Pinula", "San Luis Jilotepeque", "San Manuel Chaparrón", "San Carlos Alzatate", "Monjas", "Mataquescuintla"],
+            "Jutiapa": ["Jutiapa", "El Progreso", "Santa Catarina Mita", "Agua Blanca", "Asunción Mita", "Yupiltepeque", "Atescatempa", "Jerez", "El Adelanto", "Zapotitlán", "Comapa", "Jalpatagua", "Conguaco", "Moyuta", "Pasaco", "San José Acatempa", "Quesada"],
+            "Petén": ["Flores", "San José", "San Benito", "San Andrés", "La Libertad", "San Francisco", "Santa Ana", "Dolores", "San Luis", "Sayaxché", "Melchor de Mencos", "Poptún", "Las Cruces", "El Chal"],
+            "Quetzaltenango": ["Quetzaltenango", "Salcajá", "Olintepeque", "San Carlos Sija", "Sibilia", "Cabricán", "Cajolá", "San Miguel Sigüilá", "Ostuncalco", "San Mateo", "Concepción Chiquirichapa", "San Martín Sacatepéquez", "Almolonga", "Cantel", "Huitán", "Zunil", "Colomba", "San Francisco La Unión", "El Palmar", "Coatepeque", "Génova", "Flores Costa Cuca", "La Esperanza", "Palestina de Los Altos"],
+            "Quiché": ["Santa Cruz del Quiché", "Chiché", "Chinique", "Zacualpa", "Chajul", "Chichicastenango", "Patzité", "San Antonio Ilotenango", "San Pedro Jocopilas", "Cunén", "San Juan Cotzal", "Joyabaj", "Nebaj", "San Andrés Sajcabajá", "Uspantán", "Sacapulas", "San Bartolomé Jocotenango", "Canillá", "Chicamán", "Ixcán", "Pachalum"],
+            "Retalhuleu": ["Retalhuleu", "San Sebastián", "Santa Cruz Muluá", "San Martín Zapotitlán", "San Felipe", "San Andrés Villa Seca", "Champerico", "Nuevo San Carlos", "El Asintal"],
+            "Sacatepéquez": ["Antigua Guatemala", "Jocotenango", "Pastores", "Sumpango", "Santo Domingo Xenacoj", "Santiago Sacatepéquez", "San Bartolomé Milpas Altas", "San Lucas Sacatepéquez", "Santa Lucía Milpas Altas", "Magdalena Milpas Altas", "Santa María de Jesús", "Ciudad Vieja", "San Miguel Dueñas", "Alotenango", "San Antonio Aguas Calientes", "Santa Catarina Barahona"],
+            "San Marcos": ["San Marcos", "San Pedro Sacatepéquez", "San Antonio Sacatepéquez", "Comitancillo", "San Miguel Ixtahuacán", "Concepción Tutuapa", "Tacaná", "Sibinal", "Tajumulco", "Tejutla", "San Rafael Pie de La Cuesta", "Nuevo Progreso", "El Tumbador", "El Rodeo", "Malacatán", "Catarina", "Ayutla", "Ocos", "San Pablo", "El Quetzal", "La Reforma", "Pajapita", "Ixchiguán", "San José Ojetenam", "San Cristóbal Cucho", "Sipacapa", "Esquipulas Palo Gordo", "Río Blanco", "San Lorenzo", "La Blanca"],
+            "Santa Rosa": ["Cuilapa", "Barberena", "Santa Rosa de Lima", "Casillas", "San Rafael Las Flores", "Oratorio", "San Juan Tecuaco", "Chiquimulilla", "Taxisco", "Santa María Ixhuatán", "Guazacapán", "Santa Cruz Naranjo", "Pueblo Nuevo Viñas", "Nueva Santa Rosa"],
+            "Sololá": ["Sololá", "San José Chacayá", "Santa María Visitación", "Santa Lucía Utatlán", "Nahualá", "Santa Catarina Ixtahuacán", "Santa Clara La Laguna", "Concepción", "San Andrés Semetabaj", "Panajachel", "Santa Catarina Palopó", "San Antonio Palopó", "San Lucas Tolimán", "Santa Cruz La Laguna", "San Pablo La Laguna", "San Marcos La Laguna", "San Juan La Laguna", "San Pedro La Laguna", "Santiago Atitlán"],
+            "Suchitepéquez": ["Mazatenango", "Cuyotenango", "San Francisco Zapotitlán", "San Bernardino", "San José El Ídolo", "Santo Domingo Suchitepéquez", "San Lorenzo", "Samayac", "San Pablo Jocopilas", "San Antonio Suchitepéquez", "San Miguel Panán", "San Gabriel", "Chicacao", "Patulul", "Santa Bárbara", "San Juan Bautista", "Santo Tomás La Unión", "Zunilito", "Pueblo Nuevo", "Río Bravo", "San José La Máquina"],
+            "Totonicapán": ["Totonicapán", "San Cristóbal Totonicapán", "San Francisco El Alto", "San Andrés Xecul", "Momostenango", "Santa María Chiquimula", "Santa Lucía La Reforma", "San Bartolo"],
+            "Zacapa": ["Zacapa", "Estanzuela", "Río Hondo", "Gualán", "Teculután", "Usumatlán", "Cabañas", "San Diego", "La Unión", "Huité", "San Jorge"]
+        };
+
+        // Función para actualizar lista de municipios según el departamento seleccionado
+        function actualizarMunicipios() {
+            const deptoSelect = document.getElementById("departamento");
+            const muniSelect = document.getElementById("municipio");
+            const deptoElegido = deptoSelect.value;
+
+            // Limpiar opciones
+            muniSelect.innerHTML = '<option value="" disabled selected>Selecciona un municipio</option>';
+            
+            if (deptoElegido && municipiosGuatemala[deptoElegido]) {
+                // Habilitar y cambiar estilos
+                muniSelect.disabled = false;
+                muniSelect.classList.remove('bg-slate-100', 'text-slate-500', 'cursor-not-allowed');
+                muniSelect.classList.add('bg-slate-50', 'text-slate-700', 'cursor-pointer');
+
+                // Llenar lista ordenando alfabéticamente
+                const lista = municipiosGuatemala[deptoElegido].sort();
+                lista.forEach(muni => {
+                    const opcion = document.createElement("option");
+                    opcion.value = muni;
+                    opcion.textContent = muni;
+                    muniSelect.appendChild(opcion);
+                });
+            }
+        }
+
+        // Cargar datos guardados al iniciar (Recordar Vendedor)
         document.addEventListener("DOMContentLoaded", () => {
             const vendedorGuardado = localStorage.getItem("vendedorGuardado");
             if (vendedorGuardado) {
@@ -229,20 +302,23 @@
             }
         });
 
-        // 2. Formatear Teléfono (Agrega el guion)
+        // Formatear Teléfono (Agrega el guion)
         function formatearTelefono(input) {
-            let num = input.value.replace(/\D/g, ''); // Quita todo lo que no sea número
+            let num = input.value.replace(/\D/g, '');
             if (num.length > 4) {
                 num = num.substring(0, 4) + '-' + num.substring(4, 8);
             }
             input.value = num;
         }
 
-        // 3. Capitalizar Nombres (juan perez -> Juan Perez)
+        // Capitalizar Nombres
         function capitalizarTexto(input) {
             let palabras = input.value.split(" ");
             let textoCapitalizado = palabras.map(palabra => {
-                return palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase();
+                if(palabra.length > 0) {
+                    return palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase();
+                }
+                return "";
             }).join(" ");
             input.value = textoCapitalizado;
         }
@@ -251,75 +327,62 @@
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            
-            if (SCRIPT_URL.includes("TU_CODIGO_AQUI")) {
-                alert("Primero debes configurar la SCRIPT_URL en el código HTML con el enlace de tu Google Sheet.");
-                return;
-            }
 
-            // Guardar el nombre del vendedor en el celular para la próxima vez
+            // Guardar el nombre del vendedor en el celular
             localStorage.setItem("vendedorGuardado", document.getElementById("vendedor").value);
 
-            // 1. Mostrar pantalla de carga
+            // Mostrar pantalla de carga
             loadingText.innerText = "Obteniendo ubicación GPS...";
             loadingOverlay.classList.remove('hidden');
             loadingOverlay.classList.add('flex');
 
-            // 2. Obtener fecha y hora actual
+            // Obtener fecha y hora
             const now = new Date();
-            const fechaFormateada = now.toLocaleString('es-GT'); // Formato local
+            const fechaFormateada = now.toLocaleString('es-GT');
             document.getElementById('fechaHora').value = fechaFormateada;
 
-            // 3. Obtener Ubicación (Coordenadas)
+            // Obtener Ubicación
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
-                        // Éxito obteniendo coordenadas
                         const lat = position.coords.latitude;
                         const lng = position.coords.longitude;
                         document.getElementById('ubicacion').value = `${lat}, ${lng}`;
-                        
-                        // Proceder a enviar los datos
                         enviarDatosSheet();
                     },
                     (error) => {
-                        // Error de GPS (Denegado o sin señal)
                         console.warn("Error GPS:", error.message);
-                        alert("No se pudo obtener la ubicación. Por favor, asegúrate de tener el GPS encendido y haber dado permisos al navegador.");
+                        alert("⚠️ No se pudo obtener la ubicación. Por favor, asegúrate de tener el GPS encendido y conceder los permisos de ubicación al navegador.");
                         loadingOverlay.classList.add('hidden');
                         loadingOverlay.classList.remove('flex');
                     },
                     { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
                 );
             } else {
-                alert("Tu dispositivo o navegador no soporta geolocalización.");
+                alert("Tu dispositivo no soporta geolocalización.");
                 loadingOverlay.classList.add('hidden');
                 loadingOverlay.classList.remove('flex');
             }
         });
 
         function enviarDatosSheet() {
-            loadingText.innerText = "Guardando en la base de datos...";
+            loadingText.innerText = "Sincronizando con base de datos...";
             
             const formData = new FormData(form);
 
-            // Fetch usando 'no-cors' para evitar problemas de dominios cruzados con Google
             fetch(SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
                 body: formData
             })
             .then(() => {
-                // Al usar no-cors, la respuesta siempre es opaca, asumimos éxito si no hay error de red
                 loadingOverlay.classList.add('hidden');
                 loadingOverlay.classList.remove('flex');
-                
-                // Mostrar Modal de Éxito
                 successModal.classList.remove('hidden');
             })
             .catch(error => {
                 console.error('Error!', error.message);
-                alert("Hubo un error de conexión al intentar enviar los datos. Revisa tu internet.");
+                alert("❌ Hubo un error de conexión. Revisa que tengas internet (datos móviles o Wi-Fi) e inténtalo de nuevo.");
                 loadingOverlay.classList.add('hidden');
                 loadingOverlay.classList.remove('flex');
             });
@@ -328,12 +391,19 @@
         function closeSuccessModal() {
             successModal.classList.add('hidden');
             
-            // Limpiar formulario PERO mantener el nombre del vendedor
+            // Limpiar formulario pero mantener vendedor
             const vendedorActual = document.getElementById("vendedor").value;
             form.reset(); 
             document.getElementById("vendedor").value = vendedorActual;
 
-            window.scrollTo({ top: 0, behavior: 'smooth' }); // Volver arriba
+            // Bloquear municipio de nuevo
+            const muniSelect = document.getElementById("municipio");
+            muniSelect.innerHTML = '<option value="" disabled selected>Primero elige un departamento</option>';
+            muniSelect.disabled = true;
+            muniSelect.classList.remove('bg-slate-50', 'text-slate-700', 'cursor-pointer');
+            muniSelect.classList.add('bg-slate-100', 'text-slate-500', 'cursor-not-allowed');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
 </body>
