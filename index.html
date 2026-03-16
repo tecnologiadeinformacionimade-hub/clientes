@@ -4,6 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Registro de Clientes - IMADE</title>
+    
+    <!-- ========================================== -->
+    <!-- META TAGS PARA PWA (IPHONE Y ANDROID)      -->
+    <!-- ========================================== -->
+    <!-- Color de la barra superior en Android -->
+    <meta name="theme-color" content="#4f46e5">
+    
+    <!-- Etiquetas específicas para iPhone (Safari) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="IMADE">
+    
+    <!-- ICONO PARA IPHONE: Pon aquí el enlace a tu logo en formato PNG (Ideal 512x512) -->
+    <link rel="apple-touch-icon" id="apple-icon" href="https://via.placeholder.com/512/4f46e5/ffffff?text=IMADE">
+    
+    <!-- Enlace al manifiesto dinámico -->
+    <link rel="manifest" id="manifest-link">
+    <!-- ========================================== -->
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Iconos de FontAwesome -->
@@ -43,7 +62,7 @@
 
     <!-- Header (Sticky tipo App con gradiente) -->
     <header class="bg-gradient-to-r from-indigo-600 to-blue-500 text-white p-5 shadow-lg sticky top-0 z-40 rounded-b-2xl">
-        <div class="max-w-md mx-auto flex items-center justify-center">
+        <div class="max-w-md mx-auto flex items-center justify-center relative">
             <div class="bg-white/20 p-2 rounded-xl backdrop-blur-sm mr-3">
                 <i class="fas fa-users-cog text-2xl"></i>
             </div>
@@ -51,6 +70,10 @@
                 <h1 class="text-xl font-bold leading-tight">Registro de Clientes</h1>
                 <p class="text-xs text-indigo-100 font-medium tracking-wider uppercase">Base de Datos IMADE</p>
             </div>
+            <!-- Botón de Instalar (Solo visible si el navegador lo permite) -->
+            <button id="btnInstalar" class="absolute right-0 hidden bg-white/20 hover:bg-white/30 p-2 rounded-lg text-xs font-bold transition-all backdrop-blur-sm">
+                <i class="fas fa-download"></i> Instalar
+            </button>
         </div>
     </header>
 
@@ -60,10 +83,6 @@
             
             <!-- Decoración de fondo -->
             <div class="absolute -top-10 -right-10 w-32 h-32 bg-indigo-50 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
-
-            <p class="text-sm text-slate-500 mb-8 text-center font-medium">
-                Completa los datos. La <span class="text-indigo-600 font-semibold">ubicación</span> y <span class="text-indigo-600 font-semibold">fecha</span> se guardarán automáticamente.
-            </p>
 
             <form id="registroForm" class="space-y-6 relative z-10">
                 
@@ -107,9 +126,9 @@
                     </div>
                 </div>
 
-                <!-- 4. Correo de Cliente (AHORA OBLIGATORIO) -->
+                <!-- 4. Correo de Cliente -->
                 <div class="input-field">
-                    <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="correo">Correo Electrónico de Cliente<span class="text-rose-500">*</span></label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="correo">Correo Electrónico <span class="text-rose-500">*</span></label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                             <i class="fas fa-envelope text-indigo-400"></i>
@@ -158,7 +177,7 @@
                     </div>
                 </div>
 
-                <!-- 6. Municipio (AHORA ES SELECT AUTOMÁTICO) -->
+                <!-- 6. Municipio -->
                 <div class="input-field">
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="municipio">Municipio <span class="text-rose-500">*</span></label>
                     <div class="relative">
@@ -177,7 +196,7 @@
 
                 <!-- 7. Número de Teléfono (Celular) -->
                 <div class="input-field">
-                    <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="telefono">Teléfono Celular del Cliente <span class="text-rose-500">*</span></label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="telefono">Teléfono Celular <span class="text-rose-500">*</span></label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                             <i class="fas fa-mobile-alt text-indigo-400"></i>
@@ -189,7 +208,7 @@
 
                 <!-- 8. Número de Teléfono Fijo -->
                 <div class="input-field">
-                    <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="telefonoFijo">Teléfono Fijo del Cliente</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="telefonoFijo">Teléfono Fijo</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                             <i class="fas fa-phone-alt text-indigo-400"></i>
@@ -231,7 +250,79 @@
 
     <script>
         // =========================================================================
-        // URL DE GOOGLE APPS SCRIPT
+        // CONFIGURACIÓN PWA (APP PARA CELULARES)
+        // =========================================================================
+        
+        // 1. CAMBIA ESTE ENLACE POR TU FOTO / LOGO EN FORMATO PNG
+        // Sube tu logo a internet (Imgur, tu propio servidor, etc) y pon el link aquí.
+        const ICONO_APP_URL = "https://i.postimg.cc/FR0t3nMf/CLIENTES-(3).png";
+        
+        // Asegurar que el icono de iPhone también se actualice
+        document.getElementById('apple-icon').href = ICONO_APP_URL;
+
+        // 2. Generar el Manifiesto dinámicamente
+        const appManifest = {
+            "name": "Registro IMADE",
+            "short_name": "IMADE",
+            "start_url": window.location.href,
+            "display": "standalone", // Esto oculta la barra de direcciones
+            "background_color": "#f8fafc",
+            "theme_color": "#4f46e5",
+            "icons": [
+                {
+                    "src": ICONO_APP_URL,
+                    "sizes": "192x192",
+                    "type": "image/png"
+                },
+                {
+                    "src": ICONO_APP_URL,
+                    "sizes": "512x512",
+                    "type": "image/png"
+                }
+            ]
+        };
+        
+        // Inyectar el manifiesto en el HTML
+        const blobManifest = new Blob([JSON.stringify(appManifest)], {type: 'application/manifest+json'});
+        document.getElementById('manifest-link').href = URL.createObjectURL(blobManifest);
+
+        // 3. Generar un Service Worker básico (Requisito para Android)
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                self.addEventListener('fetch', function(event) {
+                    // Service Worker pasivo, solo para cumplir el requisito de PWA
+                });
+            `;
+            const blobSW = new Blob([swCode], {type: 'application/javascript'});
+            navigator.serviceWorker.register(URL.createObjectURL(blobSW))
+                .then(() => console.log('App lista para instalarse'))
+                .catch(err => console.log('SW Error:', err));
+        }
+
+        // 4. Botón de Instalación (Solo Android/Chrome)
+        let deferredPrompt;
+        const btnInstalar = document.getElementById('btnInstalar');
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault(); // Evita que Chrome muestre el prompt automáticamente
+            deferredPrompt = e;
+            btnInstalar.classList.remove('hidden'); // Muestra nuestro botón personalizado
+        });
+
+        btnInstalar.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    btnInstalar.classList.add('hidden');
+                }
+                deferredPrompt = null;
+            }
+        });
+
+
+        // =========================================================================
+        // LÓGICA DEL FORMULARIO ORIGINAL (MANTENIDO INTACTO)
         // =========================================================================
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8KYULiMngMxRqLXuJ38VsY2QQ__92DVDEdi5LDvEFW8IfMTDblXhWwqC48c87SQEM/exec"; 
 
@@ -240,9 +331,6 @@
         const loadingText = document.getElementById('loadingText');
         const successModal = document.getElementById('successModal');
 
-        // --- INICIO DE AUTOMATIZACIONES Y DATOS ---
-
-        // DICCIONARIO CON TODOS LOS 340 MUNICIPIOS DE GUATEMALA
         const municipiosGuatemala = {
             "Alta Verapaz": ["Cobán", "San Pedro Carchá", "San Juan Chamelco", "San Cristóbal Verapaz", "Tactic", "Tucurú", "Tamahú", "Panzós", "Senahú", "Cahabón", "Lanquín", "Chahal", "Fray Bartolomé de las Casas", "Santa Catalina La Tinta", "Raxruhá", "Chisec", "Santa Cruz Verapaz"],
             "Baja Verapaz": ["Salamá", "San Miguel Chicaj", "Rabinal", "Cubulco", "Granados", "El Chol", "San Jerónimo", "Purulhá"],
@@ -268,22 +356,18 @@
             "Zacapa": ["Zacapa", "Estanzuela", "Río Hondo", "Gualán", "Teculután", "Usumatlán", "Cabañas", "San Diego", "La Unión", "Huité", "San Jorge"]
         };
 
-        // Función para actualizar lista de municipios según el departamento seleccionado
         function actualizarMunicipios() {
             const deptoSelect = document.getElementById("departamento");
             const muniSelect = document.getElementById("municipio");
             const deptoElegido = deptoSelect.value;
 
-            // Limpiar opciones
             muniSelect.innerHTML = '<option value="" disabled selected>Selecciona un municipio</option>';
             
             if (deptoElegido && municipiosGuatemala[deptoElegido]) {
-                // Habilitar y cambiar estilos
                 muniSelect.disabled = false;
                 muniSelect.classList.remove('bg-slate-100', 'text-slate-500', 'cursor-not-allowed');
                 muniSelect.classList.add('bg-slate-50', 'text-slate-700', 'cursor-pointer');
 
-                // Llenar lista ordenando alfabéticamente
                 const lista = municipiosGuatemala[deptoElegido].sort();
                 lista.forEach(muni => {
                     const opcion = document.createElement("option");
@@ -294,7 +378,6 @@
             }
         }
 
-        // Cargar datos guardados al iniciar (Recordar Vendedor)
         document.addEventListener("DOMContentLoaded", () => {
             const vendedorGuardado = localStorage.getItem("vendedorGuardado");
             if (vendedorGuardado) {
@@ -302,7 +385,6 @@
             }
         });
 
-        // Formatear Teléfono (Agrega el guion)
         function formatearTelefono(input) {
             let num = input.value.replace(/\D/g, '');
             if (num.length > 4) {
@@ -311,7 +393,6 @@
             input.value = num;
         }
 
-        // Capitalizar Nombres
         function capitalizarTexto(input) {
             let palabras = input.value.split(" ");
             let textoCapitalizado = palabras.map(palabra => {
@@ -323,25 +404,19 @@
             input.value = textoCapitalizado;
         }
 
-        // --- FIN DE AUTOMATIZACIONES ---
-
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            // Guardar el nombre del vendedor en el celular
             localStorage.setItem("vendedorGuardado", document.getElementById("vendedor").value);
 
-            // Mostrar pantalla de carga
             loadingText.innerText = "Obteniendo ubicación GPS...";
             loadingOverlay.classList.remove('hidden');
             loadingOverlay.classList.add('flex');
 
-            // Obtener fecha y hora
             const now = new Date();
             const fechaFormateada = now.toLocaleString('es-GT');
             document.getElementById('fechaHora').value = fechaFormateada;
 
-            // Obtener Ubicación
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
@@ -391,12 +466,10 @@
         function closeSuccessModal() {
             successModal.classList.add('hidden');
             
-            // Limpiar formulario pero mantener vendedor
             const vendedorActual = document.getElementById("vendedor").value;
             form.reset(); 
             document.getElementById("vendedor").value = vendedorActual;
 
-            // Bloquear municipio de nuevo
             const muniSelect = document.getElementById("municipio");
             muniSelect.innerHTML = '<option value="" disabled selected>Primero elige un departamento</option>';
             muniSelect.disabled = true;
